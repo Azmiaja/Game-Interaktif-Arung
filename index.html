@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b5267">
+  <meta name="description" content="Game reflektif untuk belajar memahami konflik dan menemukan solusi persahabatan.">
+  <title>Ekspedisi Bajak Laut Persahabatan</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="content.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main id="game" aria-live="polite"></main>
+  <button id="music-toggle" type="button" aria-label="Nyalakan musik latar" aria-pressed="false" title="Nyalakan atau matikan musik latar">
+    <img src="assets/music-off.png" alt="" aria-hidden="true">
+  </button>
+  <span id="music-status" class="visually-hidden" aria-live="polite">Musik latar akan dimulai setelah interaksi pertama.</span>
+  <section id="orientation-warning" role="status" aria-live="polite">
+    <div class="orientation-card">
+      <span aria-hidden="true">↻</span>
+      <h1>Putar Perangkatmu</h1>
+      <p>Game ini dirancang untuk desktop atau tablet dalam posisi lanskap. Putar perangkatmu atau gunakan layar yang lebih lebar.</p>
+    </div>
+  </section>
+</body>
+</html>
