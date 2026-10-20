@@ -109,7 +109,7 @@ button:focus-visible, textarea:focus-visible { outline: 3px solid #f5b83d; outli
 }
 
 .home-screen {
-  background: linear-gradient(90deg, #073c5259, #073c521c 42%, #073c523d), url("assets/harbor-home.png") center / cover no-repeat;
+  background: linear-gradient(90deg, #073c5259, #073c521c 42%, #073c523d), url("assets/harbor-home.webp") center / cover no-repeat;
 }
 
 .home-screen::before {
@@ -319,7 +319,7 @@ h1, .display-title { font-family: "Righteous", "Trebuchet MS", sans-serif; font-
   overflow: hidden;
   border: 0;
   border-radius: 0;
-  background: #258fac url("assets/map-sea.png") center / cover no-repeat;
+  background: #258fac url("assets/map-sea.webp") center / cover no-repeat;
 }
 
 .map-world::before, .map-world::after { position: absolute; z-index: 0; content: ""; border-radius: 50%; background: #fff; opacity: .48; filter: blur(1px); }
@@ -481,7 +481,7 @@ h1, .display-title { font-family: "Righteous", "Trebuchet MS", sans-serif; font-
 .skill-card strong { display: block; margin-bottom: 4px; }
 .skill-card span { font-size: .93rem; }
 
-.sail-screen { background: linear-gradient(180deg, #0b5c78a8, #0a5478a8), url("assets/map-sea.png") center / cover no-repeat; }
+.sail-screen { background: linear-gradient(180deg, #0b5c78a8, #0a5478a8), url("assets/map-sea.webp") center / cover no-repeat; }
 .sail-ship { width: 250px; margin: 8px 0 20px; animation: bob 1.7s ease-in-out infinite; filter: drop-shadow(0 10px 5px #063c536b); }
 .sail-ship img { display: block; width: 100%; }
 @keyframes bob { 50% { transform: translateY(-12px) rotate(-3deg); } }

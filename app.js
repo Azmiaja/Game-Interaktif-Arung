@@ -6,7 +6,7 @@
   const root = document.getElementById("game");
   const musicToggle = document.getElementById("music-toggle");
   const musicStatus = document.getElementById("music-status");
-  const musicSourceUrl = "assets/sailing-puzzle.wav";
+  const musicSourceUrl = "assets/sailing-puzzle.mp3";
   const musicVolume = 0.35;
   const storyAssetVersion = "20261019-1323";
   const islandAssetVersion = "20261019-1408";
@@ -24,6 +24,7 @@
   let musicOffset = 0;
   let musicLoading = false;
   let musicAttempt = 0;
+  const preloadedImages = new Set();
   const musicIcon = musicToggle.querySelector("img");
   const defaultState = () => ({
     version: 1,
@@ -133,7 +134,7 @@
         musicEnabled = false;
         const status = window.location.protocol === "file:"
           ? "Browser memblokir audio saat game dibuka langsung sebagai file. Jalankan game melalui server lokal seperti Live Server."
-          : "Musik tidak dapat diputar. Pastikan berkas assets/sailing-puzzle.wav tersedia lalu coba lagi.";
+          : "Musik tidak dapat diputar. Pastikan berkas assets/sailing-puzzle.mp3 tersedia lalu coba lagi.";
         updateMusicControl(false, status);
         console.error("Musik latar tidak dapat diputar.", error);
       }
@@ -359,7 +360,7 @@
   function storyScreen() {
     const index = state.ui.storyStep;
     const isReview = state.ui.storyReview;
-    const copy = `<div class="story-art"><img class="story-illustration" src="assets/story-${index + 1}.png?v=${storyAssetVersion}" alt="Ilustrasi adegan ${index + 1}: cerita Salsa dan Rani"></div>
+    const copy = `<div class="story-art"><img class="story-illustration" src="assets/story-${index + 1}.webp?v=${storyAssetVersion}" alt="Ilustrasi adegan ${index + 1}: cerita Salsa dan Rani"></div>
       <div class="story-dots" aria-label="Adegan ${index + 1} dari 4">${CONTENT.story.map((_, i) => `<span class="story-dot${i === index ? " active" : ""}"></span>`).join("")}</div>
       <p class="story-copy">${escapeHtml(CONTENT.story[index])}</p>`;
     const buttons = `<div class="button-row">${index > 0 ? btn("story-prev", "SEBELUMNYA", "button-quiet") : `<span></span>`}
@@ -432,7 +433,7 @@
   }
 
   function feedbackLevel2() {
-    const body = `<div class="level2-feedback-art"><img class="story-illustration" src="assets/story-1.png?v=${storyAssetVersion}" alt="Salsa dan Rani bersama di kelas"></div><div class="level2-feedback-copy"><p class="lead">Kamu berhasil melihat dua sudut pandang. Memahami seseorang bukan berarti membenarkan semua tindakannya.</p><p>Pikiran dan perasaan mereka adalah dugaan yang membantu kita berempati. Kita tetap bisa membicarakan dampak tindakan dengan jujur.</p></div>`;
+    const body = `<div class="level2-feedback-art"><img class="story-illustration" src="assets/story-1.webp?v=${storyAssetVersion}" alt="Salsa dan Rani bersama di kelas"></div><div class="level2-feedback-copy"><p class="lead">Kamu berhasil melihat dua sudut pandang. Memahami seseorang bukan berarti membenarkan semua tindakannya.</p><p>Pikiran dan perasaan mereka adalah dugaan yang membantu kita berempati. Kita tetap bisa membicarakan dampak tindakan dengan jujur.</p></div>`;
     return shell("LEVEL 2 — EMPATI", "theme-orange", paper("Dua Sudut Pandang", body, `<div class="button-row center">${btn("l2-feedback-next", "LANJUT KE PETUNJUK")}</div>`, "level2-feedback-paper"));
   }
 
@@ -454,7 +455,7 @@
       target === "final-overview" ? "Semua petunjuk terkumpul! Kapalmu menuju Teluk Harta Karun." :
       target === "l1-intro" ? "Angkat layar! Pulau Dengarkan menanti petunjuk pertamamu." :
       `Petunjuk berhasil dikumpulkan! Kapalmu siap menuju ${target === "l2-intro" ? "Pulau Pahami" : target === "l3-intro" ? "Pulau Pikirkan" : "Pulau Temukan Solusi"}.`;
-    return `<section class="screen sail-screen"><p class="eyebrow">⛵ PELAYARAN</p><div class="sail-ship" aria-hidden="true"><img src="assets/loader.png?v=${loaderAssetVersion}" alt=""></div><h1 class="display-title">${escapeHtml(message)}</h1><p>Ombak membawa kapalmu ke petualangan berikutnya...</p><div class="button-row">${btn("sail-skip", "LEWATI", "button-primary")}</div></section>`;
+    return `<section class="screen sail-screen"><p class="eyebrow">⛵ PELAYARAN</p><div class="sail-ship" aria-hidden="true"><img src="assets/loader.webp?v=${loaderAssetVersion}" alt=""></div><h1 class="display-title">${escapeHtml(message)}</h1><p>Ombak membawa kapalmu ke petualangan berikutnya...</p><div class="button-row">${btn("sail-skip", "LEWATI", "button-primary")}</div></section>`;
   }
 
   function finalOverview() {
@@ -507,10 +508,10 @@
 
   function render() {
     const screens = {
-      home: () => `<section class="screen home-screen"><h1 class="home-title"><img src="assets/Peta-Perjalanan-Konflik_1.png" alt="Peta Perjalanan Konflik — Mari Selamatkan Persahabatan, Temukan Solusinya!"></h1><button class="captain-trigger" data-action="captain-dialog" aria-label="Ajak bicara kapten" aria-controls="captain-dialog" aria-expanded="false"><img class="captain-portrait" src="assets/captain.png" alt=""></button><p class="captain-dialog" id="captain-dialog">Ayo ikuti petualangan<br>menyelesaikan konflik<br>Salsa dan Rani!</p><div class="button-row"><button class="button button-start-image" data-action="home-start" aria-label="Mulai petualangan"><img src="assets/btn-mulai.png" alt="Mulai Petualangan"></button><button class="button button-help-image" data-action="help" aria-label="Cara bermain"><img src="assets/btn-cara-bermain.png" alt="Cara Bermain"></button></div><p class="safety-note">Gunakan nama tokoh dalam ceritamu. Jika ada masalah nyata yang membuatmu tidak nyaman, ceritakan kepada guru BK.</p></section>`,
+      home: () => `<section class="screen home-screen"><h1 class="home-title"><img src="assets/Peta-Perjalanan-Konflik_1.webp" alt="Peta Perjalanan Konflik — Mari Selamatkan Persahabatan, Temukan Solusinya!"></h1><button class="captain-trigger" data-action="captain-dialog" aria-label="Ajak bicara kapten" aria-controls="captain-dialog" aria-expanded="false"><img class="captain-portrait" src="assets/captain.webp" alt=""></button><p class="captain-dialog" id="captain-dialog">Ayo ikuti petualangan<br>menyelesaikan konflik<br>Salsa dan Rani!</p><div class="button-row"><button class="button button-start-image" data-action="home-start" aria-label="Mulai petualangan"><img src="assets/btn-mulai.png" alt="Mulai Petualangan"></button><button class="button button-help-image" data-action="help" aria-label="Cara bermain"><img src="assets/btn-cara-bermain.png" alt="Cara Bermain"></button></div><p class="safety-note">Gunakan nama tokoh dalam ceritamu. Jika ada masalah nyata yang membuatmu tidak nyaman, ceritakan kepada guru BK.</p></section>`,
       map: mapScreen,
       story: storyScreen,
-      mission: () => `<section class="screen mission-screen"><article class="paper level-intro-paper mission-paper"><h1>Misi: Berburu Harta Karun Solusi</h1><div class="level-intro-content mission-content"><div class="level-intro-art mission-art"><img class="illustration-emblem ship-large" src="assets/ship.png?v=${shipAssetVersion}" alt="Kapten mengarungi laut dengan perahu"></div><div class="level-intro-copy mission-copy"><p class="lead">Kapten, persahabatan Salsa dan Rani sedang menghadapi badai konflik.</p><p>Kumpulkan empat petunjuk dan temukan harta karun berupa solusi yang adil!</p></div></div><div class="button-row mission-actions">${btn("mission-back", "KEMBALI", "button-quiet")}${btn("mission-go", "BERLAYAR KE PULAU 1")}</div></article></section>`,
+      mission: () => `<section class="screen mission-screen"><article class="paper level-intro-paper mission-paper"><h1>Misi: Berburu Harta Karun Solusi</h1><div class="level-intro-content mission-content"><div class="level-intro-art mission-art"><img class="illustration-emblem ship-large" src="assets/ship.webp?v=${shipAssetVersion}" alt="Kapten mengarungi laut dengan perahu"></div><div class="level-intro-copy mission-copy"><p class="lead">Kapten, persahabatan Salsa dan Rani sedang menghadapi badai konflik.</p><p>Kumpulkan empat petunjuk dan temukan harta karun berupa solusi yang adil!</p></div></div><div class="button-row mission-actions">${btn("mission-back", "KEMBALI", "button-quiet")}${btn("mission-go", "BERLAYAR KE PULAU 1")}</div></article></section>`,
       "l1-intro": () => introScreen(1, "LEVEL 1 — DENGARKAN", "Cari petunjuk untuk memahami apa yang sebenarnya terjadi.", "start-l1", "MULAI TANTANGAN", "theme-green"),
       "l1-q": renderQuestion,
       "l1-reward": () => rewardScreen(1),
@@ -539,6 +540,27 @@
     if (state.ui.toast) {
       root.insertAdjacentHTML("beforeend", `<div class="toast" role="status">${escapeHtml(state.ui.toast)}</div>`);
     }
+    if (state.ui.screen === "home") {
+      scheduleImagePreload("assets/map-sea.webp");
+    } else if (state.ui.screen === "story") {
+      const nextScene = state.ui.storyStep + 2;
+      scheduleImagePreload(nextScene <= CONTENT.story.length
+        ? `assets/story-${nextScene}.webp?v=${storyAssetVersion}`
+        : `assets/ship.webp?v=${shipAssetVersion}`);
+    }
+  }
+
+  function scheduleImagePreload(source) {
+    if (preloadedImages.has(source)) return;
+    preloadedImages.add(source);
+    const preload = () => {
+      const image = new Image();
+      image.decoding = "async";
+      image.fetchPriority = "low";
+      image.src = source;
+    };
+    if ("requestIdleCallback" in window) window.requestIdleCallback(preload, { timeout: 1500 });
+    else window.setTimeout(preload, 300);
   }
 
   function updateCanvasScale() {
@@ -720,6 +742,7 @@
     state.ui.modal = null;
     saveNow();
     render();
+    startBackgroundMusic();
   });
 
   root.addEventListener("input", (event) => {
@@ -851,6 +874,7 @@
 
   root.addEventListener("pointerdown", (event) => {
     if (event.target.closest("#music-toggle")) return;
+    if (event.target.closest('[data-action="home-start"], .captain-name-modal')) return;
     if (!musicEnabled) return;
     if (musicSource || musicLoading) resumeBackgroundMusic();
     else startBackgroundMusic();
@@ -867,7 +891,6 @@
   if (state.ui.screen === "map" && !state.captainName) state.ui.modal = "captain-intro";
   render();
   root.querySelector("#captain-name")?.focus();
-  startBackgroundMusic();
   if (state.ui.screen === "sail") {
     sailTimer = window.setTimeout(finishSail, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 30 : 2400);
   }

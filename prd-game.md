@@ -316,16 +316,16 @@ Gunakan nama berkas konsisten. Placeholder diganti aset akhir tanpa mengubah kod
 
 | Berkas | Isi |
 |---|---|
-| `harbor-home.png` | Latar pelabuhan (S01) |
-| `map-sea.png` | Peta lautan (S03) |
+| `harbor-home.webp` | Latar pelabuhan teroptimasi (S01) |
+| `map-sea.webp` | Peta lautan teroptimasi (S03) |
 | `wood-frame.png` | Bingkai panel |
-| `ship.png` | Kapal pemain |
-| `captain.png` | Karakter pemandu |
+| `ship.webp` | Kapal pemain teroptimasi |
+| `captain.webp` | Karakter pemandu teroptimasi |
 | `island1.png` … `island4.png` | Ikon pulau di peta |
-| `story-1.png` … `story-4.png` | Ilustrasi adegan cerita |
+| `story-1.webp` … `story-4.webp` | Ilustrasi adegan cerita teroptimasi |
 | `reward-compass.png`, `reward-heart.png`, `reward-crystal.png`, `reward-chest.png` | Hadiah |
 
-Semua aset gambar disimpan dalam format PNG. Total aset sebaiknya < 15 MB.
+Gambar besar yang digunakan permainan disajikan sebagai WebP dengan ukuran sesuai layar; PNG asli tetap dapat disimpan sebagai sumber kerja. Musik menggunakan MP3 agar unduhan dan pemutaran tidak perlu mengandalkan berkas WAV yang lebih besar. Muat aset lanjutan setelah layar awal tampil agar perpindahan antarlayar tetap responsif.
 
 ---
 
