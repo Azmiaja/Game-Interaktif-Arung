@@ -11,6 +11,15 @@
   <script src="app.js" defer></script>
 </head>
 <body>
+  <section id="asset-loader" role="status" aria-live="polite">
+    <div class="asset-loader-card">
+      <img src="assets/loader.webp" alt="" class="asset-loader-image">
+      <h1>Menyiapkan Petualangan</h1>
+      <p id="asset-loader-message">Memuat gambar dan suara...</p>
+      <progress id="asset-loader-progress" max="100" value="0" aria-label="Progres pemuatan media"></progress>
+      <strong id="asset-loader-percent">0%</strong>
+    </div>
+  </section>
   <main id="game" aria-live="polite"></main>
   <button id="music-toggle" type="button" aria-label="Nyalakan musik latar" aria-pressed="false" title="Nyalakan atau matikan musik latar">
     <img src="assets/music-off.png" alt="" aria-hidden="true">

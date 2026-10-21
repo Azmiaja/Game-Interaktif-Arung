@@ -14,6 +14,25 @@
 * { box-sizing: border-box; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
+#asset-loader {
+  position: fixed;
+  z-index: 200;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #fff;
+  background: linear-gradient(155deg, #087b91, #0d536f 55%, #092f4a);
+  text-align: center;
+}
+#asset-loader[hidden] { display: none; }
+.asset-loader-card { display: grid; width: min(520px, 100%); justify-items: center; gap: 12px; }
+.asset-loader-image { width: 100px; height: 100px; object-fit: contain; animation: bob 1.7s ease-in-out infinite; }
+.asset-loader-card h1 { margin: 0; color: #fff1c3; font-size: 2rem; }
+.asset-loader-card p { margin: 0; }
+#asset-loader-progress { width: min(420px, 100%); height: 18px; accent-color: #f5b83d; }
+#asset-loader-percent { color: #ffe082; font-size: 1.2rem; }
+
 #music-toggle {
   position: fixed;
   z-index: 30;

@@ -12,6 +12,19 @@
   const islandAssetVersion = "20261019-1408";
   const shipAssetVersion = "20261019-1430";
   const loaderAssetVersion = "20261019-1517";
+  const gameMedia = [
+    "assets/Peta-Perjalanan-Konflik_1.webp", "assets/harbor-home.webp", "assets/map-sea.webp",
+    "assets/wood-frame.png", "assets/ship.webp", "assets/captain.webp", "assets/loader.webp",
+    "assets/harta.png", "assets/music-off.png", "assets/music-on.png", "assets/btn-mulai.png",
+    "assets/btn-cara-bermain.png", "assets/btn-homeldpi.png", "assets/pin-karakter.png",
+    "assets/dengarkan-lock.png", "assets/dengarkan-unlock.png", "assets/pahami-lock.png",
+    "assets/pahami-unlock.png", "assets/pikirkan-lock.png", "assets/pikirkan-unlock.png",
+    "assets/temukansolusi-lock.png", "assets/temukansolusi-unlock.png",
+    "assets/island1.png", "assets/island2.png", "assets/island3.png", "assets/island4.png",
+    "assets/story-1.webp", "assets/story-2.webp", "assets/story-3.webp", "assets/story-4.webp",
+    "assets/reward-compass.png", "assets/reward-heart.png", "assets/reward-crystal.png",
+    "assets/reward-chest.png", musicSourceUrl
+  ];
   const islandAssets = ["dengarkan", "pahami", "pikirkan", "temukansolusi"];
   const islandPositions = [["14%", "50%"], ["32%", "55%"], ["53%", "58%"], ["74%", "60%"]];
   let musicEnabled = true;
@@ -550,6 +563,43 @@
     }
   }
 
+  function preloadImage(source) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => image.decode().then(resolve, reject);
+      image.onerror = () => reject(new Error(`Gagal memuat media: ${source}`));
+      image.src = source;
+      if (image.complete && image.naturalWidth > 0) image.decode().then(resolve, reject);
+    });
+  }
+
+  async function preloadGameMedia() {
+    const loader = document.getElementById("asset-loader");
+    const progress = document.getElementById("asset-loader-progress");
+    const percent = document.getElementById("asset-loader-percent");
+    const message = document.getElementById("asset-loader-message");
+    let loaded = 0;
+    const tasks = gameMedia.map((source) => {
+      const task = source.endsWith(".mp3")
+        ? fetch(source).then((response) => {
+          if (!response.ok) throw new Error(`Gagal memuat media (HTTP ${response.status}): ${source}`);
+        })
+        : preloadImage(source);
+      return task.catch((error) => {
+        console.error("Media game gagal dimuat.", error);
+      }).finally(() => {
+        loaded += 1;
+        const value = Math.round((loaded / gameMedia.length) * 100);
+        progress.value = value;
+        percent.textContent = `${value}%`;
+      });
+    });
+    await Promise.all(tasks);
+    message.textContent = "Petualangan siap dimulai!";
+    await new Promise((resolve) => window.setTimeout(resolve, 250));
+    loader.hidden = true;
+  }
+
   function scheduleImagePreload(source) {
     if (preloadedImages.has(source)) return;
     preloadedImages.add(source);
@@ -887,11 +937,13 @@
   window.addEventListener("beforeunload", saveNow);
   window.addEventListener("resize", updateCanvasScale);
   window.addEventListener("orientationchange", updateCanvasScale);
-  updateCanvasScale();
-  if (state.ui.screen === "map" && !state.captainName) state.ui.modal = "captain-intro";
-  render();
-  root.querySelector("#captain-name")?.focus();
-  if (state.ui.screen === "sail") {
-    sailTimer = window.setTimeout(finishSail, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 30 : 2400);
-  }
+  preloadGameMedia().then(() => {
+    updateCanvasScale();
+    if (state.ui.screen === "map" && !state.captainName) state.ui.modal = "captain-intro";
+    render();
+    root.querySelector("#captain-name")?.focus();
+    if (state.ui.screen === "sail") {
+      sailTimer = window.setTimeout(finishSail, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 30 : 2400);
+    }
+  });
 })();
